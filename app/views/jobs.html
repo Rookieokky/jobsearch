@@ -1,0 +1,77 @@
+	<div class="row row-center">
+		<div class="row">
+            <h1>Micropak Job Search</h1>
+        </div>
+        <hr>
+
+        <div class="row">
+        	<p class="col-sm-12"> <span class="lead">Search criteria :</span>
+        		<span class="lead" ng-if="emptySelection()">Nothing selected</span>
+        		<span class="badge" ng-repeat="l in params.location">{{l}}</span>
+        		<span class="badge" ng-repeat="c in params.company">{{c}}</span>
+        		<span class="badge" ng-repeat="le in params.level">{{le}}</span>
+        		<span class="badge" ng-repeat="ca in params.category">{{ca}}</span>
+        		<br><br>
+        		<a class="btn btn-primary" ui-sref="app"><i class="fa fa-pencil"></i> Modify search</a>
+        	</p>
+        </div>
+    	<hr>
+        <div class="row">
+    	   <p class="lead col-sm-12"><span class="glyphicon glyphicon-search"></span> Search results : </p>
+        </div>
+	    <div class="row">
+        	<!-- Loader -->
+			<div layout="row" layout-sm="column" layout-align="space-around" ng-show="loading">
+				<md-progress-circular md-mode="{{loadMode}}" md-diameter="80"></md-progress-circular>
+			</div>
+        	<!-- Error messages -->
+			<div ng-show="showError">
+    			<p class="lead">
+    				<i class="fa fa-exclamation-triangle"></i> {{message}}
+    				<a ui-sref="app">Modify search</a>
+    			</p>
+    		</div>
+
+        	<!-- Jobs list -->
+        	<div ng-hide="loading || showError">
+
+        		<div ng-hide="showError" class="pagination">
+					<nav>
+					  <ul class="pager">
+					    <li class="previous"><a ng-hide="first" ng-click="previous()"><span aria-hidden="true">&larr;</span> Previous</a></li>
+					    <li class="page-number">Page : {{jobs.page+1}} / {{jobs.page_count}} </li>
+					    <li class="next"><a ng-hide="last" ng-click="next()">Next <span aria-hidden="true">&rarr;</span></a></li>
+					  </ul>
+					</nav>
+				</div>
+				<div class="clearfix"></div>
+			  	<div class="job-list col-sm-4" ng-repeat="job in jobs.results">
+			  		<div class="panel panel-default">
+					    <div class="panel-body">
+					    	<h4 class="company">{{job.name}} <small> - {{job.company.name}}</small></h4>
+					    	<p class="date"><i class="fa fa-clock-o"></i> Posted <b am-time-ago="job.publication_date"></b></p>
+					    	<p class="locations">Locations : <span ng-repeat="location in job.locations" class="badge">{{location.name}} </span></p>
+							<p class="categories">Categories : <span ng-repeat="category in job.categories" class="badge">{{category.name}} </span></p>
+							<p class="categories">Levels : <span ng-repeat="level in job.levels" class="badge">{{level.name}} </span></p>
+					  	</div>
+					  	<div class="panel-footer">
+                            <a class="btn btn-primary" ng-if="!isSaved(job)" ng-click="saveJob(job)"><i class="glyphicon glyphicon-heart-empty"></i> Save </a>
+                            <span class="btn btn-default disabled" ng-if="isSaved(job)" class="page-number"><i class="glyphicon glyphicon-heart heart-red"></i> Saved</span>
+					  		<a class="btn btn-primary" ng-href="{{job.refs.landing_page}}" target="_blank">See more</a>
+					  	</div>
+			  		</div>
+			  	</div>
+			  	<div class="clearfix"></div>
+			  	<div ng-hide="showError" class="pagination">
+					<nav>
+					  <ul class="pager">
+					    <li class="previous"><a ng-hide="first" ng-click="previous()"><span aria-hidden="true">&larr;</span> Previous</a></li>
+					    <li class="page-number">Page : {{jobs.page+1}} / {{jobs.page_count}} </li>
+					    <li class="next"><a ng-hide="last" ng-click="next()">Next <span aria-hidden="true">&rarr;</span></a></li>
+					  </ul>
+					</nav>
+				</div>
+			</div>
+
+    	</div>
+    </div>
